@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cosmic-navy: #1B0B47;
+  --cosmic-deep: #0d061f;
+  --cosmic-violet: #5222A5;
+  --cosmic-lavender: #7B61FF;
+  --cosmic-lavender-light: #9D8AFF;
+  --cosmic-lavender-glow: #B8A9FF;
+  --cosmic-pink: #FF85C1;
+  --cosmic-pink-light: #FF9ECA;
+  --cosmic-pink-glow: #FFB6E0;
+  --cosmic-cyan: #3B82F6;
+  --cosmic-cyan-light: #60A5FA;
+  --cosmic-green: #10B981;
+  --cosmic-green-glow: #34D399;
+  --cosmic-gray: #6B7280;
+  --cosmic-debris: #4B5563;
+  --stellar-white: #FFFFFF;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(180deg, #0a0518 0%, #1B0B47 30%, #0d061f 70%, #150a2e 100%);
+  min-height: 100vh;
+  color: var(--stellar-white);
+  overflow-x: hidden;
+}
+
+/* Glassmorphism with lighter pink */
+.glass {
+  background: linear-gradient(135deg, rgba(27, 11, 71, 0.7) 0%, rgba(255, 133, 193, 0.08) 100%);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 133, 193, 0.15);
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(255, 133, 193, 0.1);
+}
+
+.glass-card {
+  background: linear-gradient(145deg, rgba(27, 11, 71, 0.75) 0%, rgba(123, 97, 255, 0.08) 50%, rgba(255, 133, 193, 0.04) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 133, 193, 0.12);
+  border-radius: 28px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 
+              0 0 50px rgba(255, 133, 193, 0.08);
+}
+
+/* Neon pink glow */
+.neon-pink {
+  box-shadow: 0 0 15px rgba(255, 133, 193, 0.5),
+              0 0 30px rgba(255, 133, 193, 0.3),
+              0 0 45px rgba(255, 133, 193, 0.1);
+}
+
+.neon-lavender {
+  box-shadow: 0 0 15px rgba(123, 97, 255, 0.5),
+              0 0 30px rgba(123, 97, 255, 0.3),
+              0 0 45px rgba(123, 97, 255, 0.1);
+}
+
+/* Cute bubbly buttons */
+.btn-bubbly {
+  border-radius: 50px;
+  padding: 14px 32px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--cosmic-pink) 0%, var(--cosmic-violet) 100%);
+}
+
+.btn-bubbly::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.btn-bubbly:hover::before {
+  left: 100%;
+}
+
+.btn-bubbly:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 12px 30px rgba(255, 133, 193, 0.35);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cosmic-navy);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--cosmic-pink), var(--cosmic-violet));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(var(--cosmic-pink-light), var(--cosmic-lavender));
+}
+
+/* Star glow */
+.star-glow-cute {
+  filter: drop-shadow(0 0 20px #FF85C1) drop-shadow(0 0 40px #7B61FF);
+}
+
+/* Constellation line */
+.constellation-line {
+  stroke: url(#constellationGradient);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+  animation: dash 20s linear infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
