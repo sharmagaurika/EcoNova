@@ -35,5 +35,8 @@ class TextInput(BaseModel):
 async def receipt_image(
     file: UploadFile = File(...),
 ):
-    image_bytes = await file.read()
-    return await parse_receipt_image(image_bytes, file.content_type)
+    try:
+        image_bytes = await file.read()
+        return await parse_receipt_image(image_bytes, file.content_type)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to parse receipt image: {str(e)}")

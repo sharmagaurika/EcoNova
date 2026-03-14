@@ -1,4 +1,6 @@
 import base64
+import json
+import google.generativeai as genai
 from .gemini import ask_gemini_json
 
 _PROMPT = """\
@@ -59,20 +61,16 @@ async def parse_receipt(text: str) -> dict:
 
 
 async def parse_receipt_image(image_bytes: bytes, content_type: str = "image/jpeg") -> dict:
-    from google import genai
-    from google.genai import types
-    import os
-    import json
+    model = genai.GenerativeModel("gemini-3.1-flash-lite-preview")
+    
+    image_part = {
+        "mime_type": content_type,
+        "data": image_bytes
+    }
 
-    client = genai.Client(api_key=os.getenv("GEMINI_API_KEY", ""))
-
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents=[
-            types.Part.from_bytes(data=image_bytes, mime_type=content_type),
-            _IMAGE_PROMPT,
-        ],
-        config={"response_mime_type": "application/json"},
+    response = model.generate_content(
+        contents=[_IMAGE_PROMPT, image_part],
+        generation_config={"response_mime_type": "application/json"},
     )
 
     result = json.loads(response.text)
