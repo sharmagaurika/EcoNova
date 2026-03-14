@@ -41,7 +41,7 @@ def test_bank_parser():
         print(f"Error: {response.status_code}")
         print(response.text)
 
-def test_receipt_parser():
+def test_receipt_text_parser():
     url = "http://localhost:8000/parse/receipt"
     receipt_text = """
     Whole Foods Market
@@ -51,7 +51,7 @@ def test_receipt_parser():
     Sourdough bread        $4.50
     Cheddar cheese 200g    $5.99
     """
-    payload = {"text": receipt_text}
+    payload = {"data": receipt_text}
     headers = {"Content-Type": "application/json", "Authorization": "Bearer dev"}
     response = requests.post(url, data=json.dumps(payload), headers=headers)
     if response.status_code == 200:
@@ -67,3 +67,4 @@ def test_receipt_parser():
 if __name__ == "__main__":
     test_bank_parser()
     test_receipt_parser()
+    test_receipt_text_parser()
