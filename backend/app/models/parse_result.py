@@ -1,9 +1,13 @@
 from pydantic import BaseModel
+from typing import List
 
 class ParseResult(BaseModel):
-    merchant: str
+    description: str
     category: str
-    co2_kg: float
-    confidence: float
-    needs_review: bool
-    explanation: str
+    kg_co2: float
+    confidence: str
+
+class BankParseResponse(BaseModel):
+    items: List[ParseResult]
+    total_kg_co2: float
+    source: str = "bank"
