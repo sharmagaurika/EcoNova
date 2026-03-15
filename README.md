@@ -1,12 +1,12 @@
 # Hack-the-Galaxy
 
- 🌌 EcoNova/CarbonRace
+ 🌌 EcoNova
 The Galaxy’s Most Competitive Sustainability Tracker
 Product Specification · v1.0 · 2026
 
 # Overview
 ### "In the race to save the Galaxy, your footprint is your speed. The lighter you are, the faster you go."
-[project] transforms the abstract concept of a carbon footprint into a high-stakes, real-time competitive race. By blending Passive GPS Sensing, Gemini 2.0 AI Parsing, and social competition, we make sustainability measurable, personal, achievable, and fun!
+EcoNova transforms the abstract concept of a carbon footprint into a high-stakes, real-time competitive race. By blending Passive GPS Sensing, Gemini 2.0 AI Parsing, and social competition, we make sustainability measurable, personal, achievable, and fun!
 
 # Key Features
 Intelligent Estimation Engine
