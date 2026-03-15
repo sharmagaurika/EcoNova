@@ -18,6 +18,12 @@ Bank/Receipt OCR: Uses Gemini 2.0 Flash to categorize spending (e.g., Shell vs. 
 
 Manual Quick-Log: Tap-to-log "Cosmic Actions" for instant daily updates.
 
+# How to run this application
+1. Downloading Vite and React
+2. Enter 'npm install' in the terminal
+3. Enter 'npm run dev' in the terminal to recieve a localhost
+4. Enter the localhost URL into your browser to view!
+
 # Social & Competitive Galaxy
 The Leaderboard: Global, National, and Private "Friend Circles."
 
