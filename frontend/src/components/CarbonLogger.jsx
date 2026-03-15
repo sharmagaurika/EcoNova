@@ -3,11 +3,10 @@ import { motion } from 'framer-motion'
 import { parseBank, parseReceiptImage, parseReceiptText } from '../api'
 
 const CarbonLogger = () => {
-  const [activeMode, setActiveMode] = useState('bank') // 'bank' or 'receipt'
-  const [bankData, setBankData] = useState({
-    bankName: '',
-    accountNumber: '',
-    routingNumber: '',
+  const [activeMode, setActiveMode] = useState('transaction') // 'transaction' or 'receipt'
+  const [transactionData, setTransactionData] = useState({
+    transactionName: '',
+    transactionAmount: '',
   })
   const [receiptFile, setReceiptFile] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -15,21 +14,21 @@ const CarbonLogger = () => {
   const [error, setError] = useState(null)
   const [result, setResult] = useState(null)
 
-  const handleBankSubmit = async (e) => {
+  const handleTransactionSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
     setError(null)
     setResult(null)
     
     try {
-      // Combine bank info into text for parsing
-      const bankText = `Bank: ${bankData.bankName}, Account: ${bankData.accountNumber}, Routing: ${bankData.routingNumber}`
-      const response = await parseBank(bankText)
+      // Combine transaction info into text for parsing
+      const transactionText = `Transaction: ${transactionData.transactionName}, Amount: ${transactionData.transactionAmount}`
+      const response = await parseBank(transactionText)
       setResult(response)
       setSubmitted(true)
       setTimeout(() => {
         setSubmitted(false)
-        setBankData({ bankName: '', accountNumber: '', routingNumber: '' })
+        setTransactionData({ transactionName: '', transactionAmount: '' })
       }, 3000)
     } catch (err) {
       setError(err.message)
@@ -37,7 +36,7 @@ const CarbonLogger = () => {
       setSubmitted(true)
       setTimeout(() => {
         setSubmitted(false)
-        setBankData({ bankName: '', accountNumber: '', routingNumber: '' })
+        setTransactionData({ transactionName: '', transactionAmount: '' })
       }, 3000)
     } finally {
       setIsSubmitting(false)
@@ -99,14 +98,14 @@ const CarbonLogger = () => {
       <div className="flex justify-center mb-8">
         <div className="glass rounded-full p-1 flex">
           <button
-            onClick={() => setActiveMode('bank')}
+            onClick={() => setActiveMode('transaction')}
             className={`px-6 py-3 rounded-full transition-all duration-300 ${
-              activeMode === 'bank'
+              activeMode === 'transaction'
                 ? 'bg-cosmic-pink text-white'
                 : 'text-cosmic-pinkLight hover:text-white'
             }`}
           >
-            Bank Info
+            Transaction Info
           </button>
           <button
             onClick={() => setActiveMode('receipt')}
@@ -130,7 +129,7 @@ const CarbonLogger = () => {
         >
           <div className="text-4xl mb-2">✨</div>
           <p className="text-cosmic-green font-medium">
-            {activeMode === 'bank' ? 'Bank connected successfully!' : 'Receipt scanned & processed!'}
+            {activeMode === 'transaction' ? 'Transaction logged successfully!' : 'Receipt scanned & processed!'}
           </p>
           {result && (
             <p className="text-cosmic-lavenderLight text-sm mt-1">
@@ -154,23 +153,23 @@ const CarbonLogger = () => {
         </motion.div>
       )}
 
-      {/* Bank Info Form */}
-      {activeMode === 'bank' && (
+      {/* Transaction Info Form */}
+      {activeMode === 'transaction' && (
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="glass-card p-8"
         >
-          <form onSubmit={handleBankSubmit} className="space-y-6">
+          <form onSubmit={handleTransactionSubmit} className="space-y-6">
             <div>
               <label className="block text-cosmic-pinkLight text-sm mb-2">
-                Bank Name
+                Transaction Name
               </label>
               <input
                 type="text"
-                value={bankData.bankName}
-                onChange={(e) => setBankData({ ...bankData, bankName: e.target.value })}
-                placeholder="e.g., Chase, Bank of America"
+                value={transactionData.transactionName}
+                onChange={(e) => setTransactionData({ ...transactionData, transactionName: e.target.value })}
+                placeholder="e.g., Grocery Shopping, Flight, Restaurant"
                 className="w-full px-4 py-3 rounded-xl bg-cosmic-deep/50 border border-cosmic-pink/20 
                          text-white placeholder-cosmic-gray focus:border-cosmic-pink focus:outline-none
                          transition-colors"
@@ -180,29 +179,13 @@ const CarbonLogger = () => {
 
             <div>
               <label className="block text-cosmic-pinkLight text-sm mb-2">
-                Account Number
+                Transaction Amount
               </label>
               <input
                 type="text"
-                value={bankData.accountNumber}
-                onChange={(e) => setBankData({ ...bankData, accountNumber: e.target.value })}
-                placeholder="Enter account number"
-                className="w-full px-4 py-3 rounded-xl bg-cosmic-deep/50 border border-cosmic-pink/20 
-                         text-white placeholder-cosmic-gray focus:border-cosmic-pink focus:outline-none
-                         transition-colors"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-cosmic-pinkLight text-sm mb-2">
-                Routing Number
-              </label>
-              <input
-                type="text"
-                value={bankData.routingNumber}
-                onChange={(e) => setBankData({ ...bankData, routingNumber: e.target.value })}
-                placeholder="Enter routing number"
+                value={transactionData.transactionAmount}
+                onChange={(e) => setTransactionData({ ...transactionData, transactionAmount: e.target.value })}
+                placeholder="Enter amount (e.g., $50.00)"
                 className="w-full px-4 py-3 rounded-xl bg-cosmic-deep/50 border border-cosmic-pink/20 
                          text-white placeholder-cosmic-gray focus:border-cosmic-pink focus:outline-none
                          transition-colors"
@@ -223,16 +206,16 @@ const CarbonLogger = () => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
-                  Connecting...
+                  Processing...
                 </span>
               ) : (
-                'Connect Bank'
+                'Log Transaction'
               )}
             </motion.button>
           </form>
 
           <p className="text-center text-cosmic-gray text-xs mt-4">
-            Your bank data is encrypted and secure. We never store your credentials.
+            Your transaction data is encrypted and secure. We never store your credentials.
           </p>
         </motion.div>
       )}
