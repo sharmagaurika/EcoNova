@@ -1,4 +1,4 @@
-# Hack-the-Galaxy
+# Hack-the-Galaxy 3rd Place Winner
 
  🌌 EcoNova
 The Galaxy’s Most Competitive Sustainability Tracker
