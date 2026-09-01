@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useEffect, useMemo, useReducer } from 'react'
 import { SEED } from '../data/seed'
 import { breakdownFromLogs, ecoScoreFromMass, round3 } from './carbon'
+import { newId } from './format'
 
-const STORAGE_KEY = 'econova.v3'
+const STORAGE_KEY = 'econova.v4'
 const StoreContext = createContext(null)
 
 function hydrate() {
@@ -177,6 +178,4 @@ export function useStore() {
   return value
 }
 
-export function newId(prefix) {
-  return `${prefix}-${Math.random().toString(36).slice(2, 8)}`
-}
+export { newId } from './format'

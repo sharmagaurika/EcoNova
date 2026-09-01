@@ -1,128 +1,80 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { useStore } from '../lib/store'
 
-const FEATURES = [
-  {
-    kicker: 'Sensing',
-    title: 'Live GPS galaxy tracking',
-    copy: 'Passive geolocation classifies walking, cycling, transit, car, and highway from speed thresholds — then applies IPCC factors in real time.',
-  },
-  {
-    kicker: 'Intelligence',
-    title: 'Gemini Nova parser',
-    copy: 'Receipts, bank lines, and flight confirmations become structured carbon with confidence scores. Offline, the on-device estimator keeps the demo live.',
-  },
-  {
-    kicker: 'Competition',
-    title: 'Weekly sprint to Supernova',
-    copy: 'Lowest mass in a rolling 7-day window takes the badge. Friend circles, national boards, and a live trash-talk feed keep the race honest.',
-  },
-]
-
-const STACK = [
-  ['Frontend', 'React 18 · Vite · Tailwind · Canvas HUD'],
-  ['Motion', 'Framer Motion · Geolocation API'],
-  ['Intelligence', 'Gemini 2.0 Flash · IPCC / DEFRA 2024'],
-  ['Privacy', 'localStorage first · no credential vault'],
-]
-
 export default function Landing() {
-  const { carbonMass, ecoScore, you, state } = useStore()
+  const { carbonMass, you, deltaPct } = useStore()
+
   return (
-    <div className="relative z-10">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-        <div>
-          <p className="kicker">Hack the Galaxy · 3rd place</p>
-          <p className="display text-3xl leading-none">
-            ECO<span className="text-signal">NOVA</span>
-          </p>
-        </div>
-        <Link to="/command" className="btn btn-primary">
-          Enter the race
-        </Link>
+    <div className="min-h-screen">
+      <header className="mx-auto flex max-w-5xl items-center justify-between px-5 py-5">
+        <p className="font-semibold">EcoNova</p>
+        <Link to="/overview" className="btn btn-primary">Open my week</Link>
       </header>
 
-      <section className="mx-auto grid max-w-6xl gap-12 px-6 pb-20 pt-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-        <div>
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="kicker text-signal"
-          >
-            Competitive sustainability
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.08 }}
-            className="display mt-4 text-6xl leading-[0.9] sm:text-8xl"
-          >
-            In the race to save the galaxy, your footprint is your speed.
-          </motion.h1>
-          <p className="mt-6 max-w-xl text-lg text-mute">
-            EcoNova turns carbon mass into orbital drag. The lighter you are, the faster you go. GPS, Gemini parsing, and social sprints make the invisible measurable.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/command" className="btn btn-primary">Open command</Link>
-            <Link to="/log" className="btn btn-ghost">Log a vector</Link>
-          </div>
+      <section className="mx-auto max-w-5xl px-5 pb-16 pt-8">
+        <p className="text-sm font-semibold text-good">Weekly carbon race</p>
+        <h1 className="serif mt-3 max-w-3xl text-5xl leading-tight sm:text-6xl">
+          Lowest CO₂ this week wins.
+        </h1>
+        <p className="mt-5 max-w-2xl text-lg leading-7 text-mute">
+          EcoNova turns everyday stuff — commutes, groceries, flights — into kilograms of CO₂.
+          You log what you did. We estimate the carbon. Friends compete to stay lightest.
+        </p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link to="/log" className="btn btn-primary">Add an activity</Link>
+          <Link to="/overview" className="btn btn-ghost">See this week’s score</Link>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="panel hud-grid p-6"
-        >
-          <p className="kicker">Telemetry</p>
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <Metric label="Weekly mass" value={`${carbonMass.toFixed(1)} kg`} tone="text-gold" />
-            <Metric label="Eco score" value={String(ecoScore)} tone="text-signal" />
-            <Metric label="Sprint rank" value={`#${you?.rank ?? 4}`} tone="text-ion" />
-            <Metric label="Streak" value={`${state.profile.streak} days`} tone="text-paper" />
-          </div>
-          <p className="mt-5 text-sm text-mute">
-            AvaSTAR brightens as mass drops. Debris gathers when the week runs heavy. Supernova is the prize.
-          </p>
-        </motion.div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-6 pb-16">
-        <div className="grid gap-4 md:grid-cols-3">
-          {FEATURES.map((feature) => (
-            <article key={feature.title} className="panel p-6">
-              <p className="kicker text-signal">{feature.kicker}</p>
-              <h2 className="mt-3 text-xl font-semibold">{feature.title}</h2>
-              <p className="mt-3 text-sm leading-6 text-mute">{feature.copy}</p>
-            </article>
-          ))}
+        <div className="mt-12 grid gap-4 sm:grid-cols-3">
+          <Stat label="Your CO₂ this week" value={`${carbonMass.toFixed(1)} kg`} />
+          <Stat label="Your rank" value={`#${you?.rank ?? 4} of 8`} />
+          <Stat label="vs last week" value={deltaPct <= 0 ? `${deltaPct}%` : `+${deltaPct}%`} />
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 pb-24">
-        <div className="panel p-8">
-          <p className="kicker">Stack</p>
-          <h2 className="display text-4xl">Technically sound, demo-ready</h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {STACK.map(([label, value]) => (
-              <div key={label} className="panel-tight p-4">
-                <p className="kicker">{label}</p>
-                <p className="mt-2 text-sm">{value}</p>
-              </div>
-            ))}
-          </div>
+      <section className="mx-auto max-w-5xl px-5 pb-16">
+        <h2 className="serif text-3xl">What you do in the app</h2>
+        <ol className="mt-6 grid gap-4 md:grid-cols-3">
+          <Step n="1" title="Log something real" body="A bike ride, a receipt, a flight, or tap a common activity. GPS can classify a commute from speed." />
+          <Step n="2" title="See the kilogram number" body="Each item gets a CO₂ estimate from IPCC / DEFRA factors. Lower total is better." />
+          <Step n="3" title="Beat the week" body="The leaderboard is a 7-day race. Tips tell you the one swap that would move you up." />
+        </ol>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-5 pb-20">
+        <div className="card p-6 sm:p-8">
+          <h2 className="serif text-3xl">What gets measured</h2>
+          <ul className="mt-5 grid gap-3 sm:grid-cols-2 text-sm leading-6">
+            <li><strong>Trips.</strong> Walking, bike, transit, car, or highway from GPS speed, or a tap.</li>
+            <li><strong>Purchases.</strong> Paste a bank line or receipt. Gemini reads it when the API is on; otherwise a local estimate.</li>
+            <li><strong>Food.</strong> Beef vs plant meals are the biggest weekly swing besides flights.</li>
+            <li><strong>Friends.</strong> Same week, same rules. Lightest total is first.</li>
+          </ul>
+          <p className="mt-6 text-xs text-mute">
+            EcoNova started as a Hack the Galaxy project. The race metaphor stays; the app is just a carbon tracker.
+          </p>
         </div>
       </section>
     </div>
   )
 }
 
-function Metric({ label, value, tone }) {
+function Stat({ label, value }) {
   return (
-    <div className="panel-tight p-4">
-      <p className="kicker">{label}</p>
-      <p className={`display mt-1 text-3xl ${tone}`}>{value}</p>
+    <div className="card p-5">
+      <p className="text-sm text-mute">{label}</p>
+      <p className="mt-1 text-3xl font-semibold">{value}</p>
     </div>
+  )
+}
+
+function Step({ n, title, body }) {
+  return (
+    <li className="card p-5">
+      <p className="mono text-sm text-good">{n}</p>
+      <p className="mt-2 font-semibold">{title}</p>
+      <p className="mt-2 text-sm leading-6 text-mute">{body}</p>
+    </li>
   )
 }

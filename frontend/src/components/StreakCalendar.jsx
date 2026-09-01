@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 
 export default function StreakCalendar({ logs }) {
   const cells = useMemo(() => {
-    const days = Array.from({ length: 28 }, (_, i) => {
+    return Array.from({ length: 28 }, (_, i) => {
       const date = new Date()
       date.setDate(date.getDate() - (27 - i))
       const key = date.toISOString().slice(0, 10)
@@ -11,19 +11,19 @@ export default function StreakCalendar({ logs }) {
       const heavy = hits.some((log) => log.kg > 20)
       return { key, green, heavy, day: date.getDate() }
     })
-    return days
   }, [logs])
 
   return (
     <div>
-      <p className="kicker mb-3">28-day burn calendar</p>
-      <div className="grid grid-cols-7 gap-1.5">
+      <p className="font-semibold">Last 28 days</p>
+      <p className="mt-1 text-sm text-mute">Green = you logged a low-carbon action. Orange = a high-impact day.</p>
+      <div className="mt-3 grid grid-cols-7 gap-1.5">
         {cells.map((cell) => (
           <div
             key={cell.key}
             title={cell.key}
             className={`grid h-8 place-items-center rounded-md text-[10px] mono ${
-              cell.heavy ? 'bg-flare/30 text-flare' : cell.green ? 'bg-signal/25 text-signal' : 'bg-white/5 text-mute'
+              cell.heavy ? 'bg-orange-100 text-orange-800' : cell.green ? 'bg-green-100 text-green-800' : 'bg-[#eeeae2] text-mute'
             }`}
           >
             {cell.day}

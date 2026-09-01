@@ -1,7 +1,7 @@
 export function formatKg(value, { signed = true } = {}) {
   const n = Number(value) || 0
   const abs = Math.abs(n)
-  const body = abs >= 100 ? abs.toFixed(0) : abs >= 10 ? abs.toFixed(1) : abs.toFixed(1)
+  const body = abs >= 100 ? abs.toFixed(0) : abs.toFixed(1)
   if (!signed) return `${body} kg`
   if (n > 0) return `+${body} kg`
   if (n < 0) return `−${body} kg`
@@ -23,6 +23,6 @@ export function relativeTime(iso) {
   return `${days}d ago`
 }
 
-export function todayKey(date = new Date()) {
-  return date.toISOString().slice(0, 10)
+export function newId(prefix) {
+  return `${prefix}-${Math.random().toString(36).slice(2, 8)}`
 }

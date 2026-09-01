@@ -1,30 +1,29 @@
 import React from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import Starfield from './components/Starfield'
 import AppShell from './components/AppShell'
 import Landing from './pages/Landing'
-import Command from './pages/Command'
-import Galaxy from './pages/Galaxy'
-import Race from './pages/Race'
+import Overview from './pages/Overview'
 import Log from './pages/Log'
-import Coach from './pages/Coach'
+import Leaderboard from './pages/Leaderboard'
+import Tips from './pages/Tips'
 import { StoreProvider } from './lib/store'
 
 export default function App() {
   return (
     <StoreProvider>
       <BrowserRouter>
-        <Starfield />
-        <div className="scanline fixed inset-0 z-[1] opacity-40" />
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route element={<AppShell />}>
-            <Route path="/command" element={<Command />} />
-            <Route path="/galaxy" element={<Galaxy />} />
-            <Route path="/race" element={<Race />} />
+            <Route path="/overview" element={<Overview />} />
             <Route path="/log" element={<Log />} />
-            <Route path="/coach" element={<Coach />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/tips" element={<Tips />} />
           </Route>
+          <Route path="/command" element={<Navigate to="/overview" replace />} />
+          <Route path="/galaxy" element={<Navigate to="/leaderboard" replace />} />
+          <Route path="/race" element={<Navigate to="/leaderboard" replace />} />
+          <Route path="/coach" element={<Navigate to="/tips" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

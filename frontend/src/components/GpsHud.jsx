@@ -17,7 +17,7 @@ export default function GpsHud() {
     if (simRef.current) clearInterval(simRef.current)
   }, [])
 
-  const persistTick = (distanceKm, speedKmh, extra = {}) => {
+  const persistTick = (distanceKm, speedKmh) => {
     const result = transportEmissions(speedKmh, distanceKm)
     tally.current.distanceKm = round3(tally.current.distanceKm + distanceKm)
     tally.current.emissionsKg = round3(tally.current.emissionsKg + result.emissionsKg)
@@ -28,7 +28,6 @@ export default function GpsHud() {
         emissionsKg: tally.current.emissionsKg,
         mode: result.mode,
         speedKmh,
-        ...extra,
       },
     })
     logMovement(distanceKm, speedKmh).catch(() => {})
@@ -36,7 +35,7 @@ export default function GpsHud() {
 
   const startLive = () => {
     if (!navigator.geolocation) {
-      startSim()
+      startDemo()
       return
     }
     tally.current = { distanceKm: 0, emissionsKg: 0 }
@@ -53,19 +52,18 @@ export default function GpsHud() {
         }
         lastPoint.current = next
       },
-      () => startSim(),
+      () => startDemo(),
       { enableHighAccuracy: true, maximumAge: 2000, timeout: 8000 },
     )
   }
 
-  const startSim = () => {
+  const startDemo = () => {
     if (watchRef.current) navigator.geolocation.clearWatch(watchRef.current)
     tally.current = { distanceKm: 0, emissionsKg: 0 }
     dispatch({ type: 'gps-start', simulated: true })
     let i = 0
     simRef.current = setInterval(() => {
-      const speed = SIM_SPEEDS[i % SIM_SPEEDS.length]
-      persistTick(0.35, speed)
+      persistTick(0.35, SIM_SPEEDS[i % SIM_SPEEDS.length])
       i += 1
     }, 1200)
   }
@@ -73,9 +71,9 @@ export default function GpsHud() {
   const stop = () => {
     if (watchRef.current) navigator.geolocation.clearWatch(watchRef.current)
     if (simRef.current) clearInterval(simRef.current)
-    const { distanceKm, emissionsKg, mode } = tally.current.distanceKm
-      ? { ...tally.current, mode: state.gps.mode }
-      : state.gps
+    const distanceKm = tally.current.distanceKm
+    const emissionsKg = tally.current.emissionsKg
+    const mode = state.gps.mode
     if (distanceKm > 0) {
       dispatch({
         type: 'add-log',
@@ -93,33 +91,29 @@ export default function GpsHud() {
   }
 
   return (
-    <div className="panel p-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <p className="kicker">Passive GPS sensing</p>
-          <h3 className="display text-3xl">Live transport class</h3>
-          <p className="mt-2 max-w-md text-sm text-mute">
-            Speed thresholds map walking, cycling, transit, car, and highway using IPCC/DEFRA factors.
-          </p>
-        </div>
+    <div className="card p-6">
+      <p className="font-semibold">Track a commute</p>
+      <p className="mt-1 max-w-xl text-sm text-mute">
+        Uses your phone GPS. Speed decides the mode: walk, bike, transit, car, or highway. Then it multiplies distance by a standard CO₂ factor.
+      </p>
+      <div className="mt-4 flex flex-wrap gap-2">
         {state.gps.active ? (
-          <button className="btn btn-ghost" onClick={stop}>End session</button>
+          <button className="btn btn-ghost" onClick={stop}>Stop and save</button>
         ) : (
-          <div className="flex gap-2">
-            <button className="btn btn-primary" onClick={startLive}>Arm GPS</button>
-            <button className="btn btn-ghost" onClick={startSim}>Simulate commute</button>
-          </div>
+          <>
+            <button className="btn btn-primary" onClick={startLive}>Start GPS tracking</button>
+            <button className="btn btn-ghost" onClick={startDemo}>Play a demo commute</button>
+          </>
         )}
       </div>
-
-      <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
-        <Stat label="Mode" value={state.gps.mode} />
+      <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">
+        <Stat label="How you’re moving" value={state.gps.mode} />
         <Stat label="Speed" value={`${state.gps.speedKmh.toFixed(0)} km/h`} />
         <Stat label="Distance" value={`${state.gps.distanceKm.toFixed(2)} km`} />
-        <Stat label="Mass added" value={`${state.gps.emissionsKg.toFixed(3)} kg`} />
+        <Stat label="CO₂ this trip" value={`${state.gps.emissionsKg.toFixed(2)} kg`} />
       </div>
       {state.gps.simulated && (
-        <p className="mt-3 text-xs text-gold">Demo telemetry — speed ramps through the classification table.</p>
+        <p className="mt-3 text-sm text-mute">Demo mode: speed changes on a timer so you can show judges without going outside.</p>
       )}
     </div>
   )
@@ -127,9 +121,9 @@ export default function GpsHud() {
 
 function Stat({ label, value }) {
   return (
-    <div className="panel-tight p-4">
-      <p className="kicker">{label}</p>
-      <p className="mono mt-1 text-lg">{value}</p>
+    <div className="rounded-xl border border-line p-4">
+      <p className="text-xs text-mute">{label}</p>
+      <p className="mono mt-1">{value}</p>
     </div>
   )
 }

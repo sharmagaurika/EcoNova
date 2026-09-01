@@ -64,9 +64,9 @@ export const SEED = {
   ],
   feed: [
     { id: 'fd1', name: 'An', text: 'logged a bike commute', kg: -3.2, at: day(0, 8) },
-    { id: 'fd2', name: 'Alex', text: 'held the NYC flight as a comet — not yet logged', kg: 0, at: day(1, 14) },
+    { id: 'fd2', name: 'Alex', text: 'skipped logging a NYC flight for now', kg: 0, at: day(1, 14) },
     { id: 'fd3', name: 'Mara', text: 'swapped beef for lentils', kg: -6.8, at: day(1, 19) },
-    { id: 'fd4', name: 'Jennifer', text: 'is focusing with Mara — constellation active', kg: 0, at: day(0, 11) },
+    { id: 'fd4', name: 'Jennifer', text: 'is competing in the same friend group as Mara', kg: 0, at: day(0, 11) },
     { id: 'fd5', name: 'Emily', text: 'took transit instead of a rideshare', kg: -1.6, at: day(2, 9) },
   ],
   sparkline: [36.8, 35.2, 34.1, 33.8, 33.0, 32.9, 32.4],

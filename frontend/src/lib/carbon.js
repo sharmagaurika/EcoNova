@@ -29,15 +29,15 @@ export const FACTORS = {
 }
 
 export const QUICK_ACTIONS = [
-  { id: 'walk', label: 'Walk the trip', hint: 'Replace a short car hop', kg: -1.8, xp: 70, category: 'transport', kind: 'green' },
-  { id: 'bike', label: 'Bike commute', hint: 'Door to door, zero tailpipe', kg: -3.2, xp: 90, category: 'transport', kind: 'green' },
-  { id: 'transit', label: 'Public transit', hint: 'Bus, metro, or rail', kg: -1.5, xp: 55, category: 'transport', kind: 'green' },
-  { id: 'skip-meat', label: 'Skip meat tonight', hint: 'Plant plate instead of beef', kg: -2.1, xp: 80, category: 'food', kind: 'green' },
-  { id: 'wfh', label: 'Remote session', hint: 'Skip the meeting flight', kg: -12, xp: 140, category: 'transport', kind: 'green' },
-  { id: 'local', label: 'Buy local / used', hint: 'Skip last-mile logistics', kg: -0.9, xp: 40, category: 'shopping', kind: 'green' },
-  { id: 'uber', label: 'Rideshare hop', hint: 'Typical 8 km city trip', kg: 1.4, xp: 10, category: 'transport', kind: 'cost' },
-  { id: 'beef', label: 'Beef dinner', hint: 'High-intensity meal', kg: 7.2, xp: 8, category: 'food', kind: 'cost' },
-  { id: 'flight', label: 'Long-haul flight', hint: 'IPCC multiplier applied', kg: 650, xp: 5, category: 'transport', kind: 'cost' },
+  { id: 'walk', label: 'Walked instead of driving', hint: 'Short trip on foot', kg: -1.8, xp: 70, category: 'transport', kind: 'green' },
+  { id: 'bike', label: 'Biked to work', hint: 'Instead of a car commute', kg: -3.2, xp: 90, category: 'transport', kind: 'green' },
+  { id: 'transit', label: 'Took the bus or metro', hint: 'Instead of driving', kg: -1.5, xp: 55, category: 'transport', kind: 'green' },
+  { id: 'skip-meat', label: 'Ate a plant meal', hint: 'Instead of beef', kg: -2.1, xp: 80, category: 'food', kind: 'green' },
+  { id: 'wfh', label: 'Took a video call', hint: 'Instead of flying to a meeting', kg: -12, xp: 140, category: 'transport', kind: 'green' },
+  { id: 'local', label: 'Bought used or local', hint: 'Skipped shipping', kg: -0.9, xp: 40, category: 'shopping', kind: 'green' },
+  { id: 'uber', label: 'Took a rideshare', hint: 'Typical 8 km city trip', kg: 1.4, xp: 10, category: 'transport', kind: 'cost' },
+  { id: 'beef', label: 'Ate a beef meal', hint: 'Highest-impact common meal', kg: 7.2, xp: 8, category: 'food', kind: 'cost' },
+  { id: 'flight', label: 'Took a long-haul flight', hint: 'Largest single hit this week', kg: 650, xp: 5, category: 'transport', kind: 'cost' },
 ]
 
 const MERCHANT_RULES = [
@@ -133,14 +133,14 @@ export function swapSuggestions(breakdown) {
   if ((breakdown.food ?? 0) >= 8) {
     suggestions.push({
       title: 'Swap 2 beef meals for chicken',
-      detail: 'Drops about 11 kg this week — enough to reclaim a podium slot.',
+      detail: 'Drops about 11 kg this week — often enough to move up a rank.',
       kg: -10.8,
     })
   }
   if ((breakdown.transport ?? 0) >= 10) {
     suggestions.push({
-      title: 'Replace two car hops with transit',
-      detail: 'Same commute window, ~3 kg lighter orbital mass.',
+      title: 'Replace two car trips with transit',
+      detail: 'Same commute, about 3 kg less this week.',
       kg: -3.4,
     })
   }
@@ -154,7 +154,7 @@ export function swapSuggestions(breakdown) {
   if (!suggestions.length) {
     suggestions.push({
       title: 'Hold the line',
-      detail: 'Your mass is already light. One more green action locks the Supernova.',
+      detail: 'You are already light this week. One more bike or plant meal helps lock first place.',
       kg: -1.2,
     })
   }

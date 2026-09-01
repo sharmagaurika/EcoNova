@@ -22,21 +22,19 @@ export default function QuickLog() {
   }
 
   return (
-    <div className="panel p-6">
-      <p className="kicker">Cosmic actions</p>
-      <h3 className="display text-3xl">Quick log</h3>
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="card p-6">
+      <p className="font-semibold">Tap what you did</p>
+      <p className="mt-1 text-sm text-mute">Green rows lower this week’s total. Orange rows add to it.</p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {QUICK_ACTIONS.map((action) => (
           <button
             key={action.id}
             onClick={() => log(action)}
-            className="panel-tight p-4 text-left hover:border-signal/40"
+            className="rounded-xl border border-line p-4 text-left hover:border-good"
           >
             <p className="font-medium">{action.label}</p>
-            <p className="text-xs text-mute mt-1">{action.hint}</p>
-            <p className={`mono mt-3 text-sm ${action.kg < 0 ? 'text-signal' : 'text-flare'}`}>
-              {formatKg(action.kg)} · +{action.xp} XP
-            </p>
+            <p className="mt-1 text-sm text-mute">{action.hint}</p>
+            <p className={`mono mt-3 text-sm ${action.kg < 0 ? 'good' : 'warn'}`}>{formatKg(action.kg)}</p>
           </button>
         ))}
       </div>
