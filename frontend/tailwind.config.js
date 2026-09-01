@@ -15,8 +15,8 @@ export default {
         void: '#07030f',
       },
       fontFamily: {
-        sans: ['DM Sans', 'system-ui', 'sans-serif'],
-        serif: ['Newsreader', 'Georgia', 'serif'],
+        sans: ['Space Grotesk', 'system-ui', 'sans-serif'],
+        serif: ['Space Grotesk', 'system-ui', 'sans-serif'],
         mono: ['IBM Plex Mono', 'ui-monospace', 'monospace'],
       },
     },

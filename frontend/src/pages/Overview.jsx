@@ -24,8 +24,7 @@ export default function Overview() {
         </div>
         <div className="ml-auto text-center">
           <MiniStar ecoScore={ecoScore} />
-          <p className="mt-1 text-sm font-medium">{state.profile.name}</p>
-          <p className="text-[11px] text-mute">AvaSTAR</p>
+          <p className="mt-2 text-sm font-medium">{state.profile.name}</p>
         </div>
       </div>
 

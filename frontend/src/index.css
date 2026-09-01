@@ -18,7 +18,7 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--void);
-  font-family: 'DM Sans', system-ui, sans-serif;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
 }
 
 .space-cursor,
@@ -35,7 +35,7 @@ body {
 
 ::selection { background: rgba(255, 142, 200, 0.35); }
 
-.serif { font-family: Newsreader, Georgia, serif; }
+.serif { font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 600; letter-spacing: -0.03em; }
 
 .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
 
