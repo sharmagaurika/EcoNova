@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo, useReducer } from
 import { SEED } from '../data/seed'
 import { breakdownFromLogs, ecoScoreFromMass, round3 } from './carbon'
 
-const STORAGE_KEY = 'econova.v2'
+const STORAGE_KEY = 'econova.v3'
 const StoreContext = createContext(null)
 
 function hydrate() {
@@ -38,13 +38,31 @@ function reducer(state, action) {
   switch (action.type) {
     case 'toggle-constellation':
       return { ...state, constellationMode: !state.constellationMode }
-    case 'complete-mission':
-      return {
+    case 'complete-mission': {
+      const mission = state.missions.find((item) => item.id === action.id)
+      if (!mission || mission.done) return state
+      const next = {
         ...state,
-        missions: state.missions.map((mission) =>
-          mission.id === action.id ? { ...mission, done: true } : mission,
+        missions: state.missions.map((item) =>
+          item.id === action.id ? { ...item, done: true } : item,
         ),
       }
+      if (mission.kg) {
+        return reducer(next, {
+          type: 'add-log',
+          bumpStreak: mission.kg < 0,
+          log: {
+            id: newId('m'),
+            name: mission.text,
+            kg: mission.kg,
+            category: mission.kg < 0 ? 'transport' : 'other',
+            type: 'mission',
+            at: new Date().toISOString(),
+          },
+        })
+      }
+      return next
+    }
     case 'add-log': {
       const log = action.log
       const logs = [log, ...state.logs].slice(0, 40)
@@ -101,9 +119,10 @@ function reducer(state, action) {
 
 function weeklyMass(logs) {
   const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000
-  return logs
+  const net = logs
     .filter((log) => new Date(log.at).getTime() >= cutoff)
-    .reduce((sum, log) => sum + Math.max(0, log.kg), 0)
+    .reduce((sum, log) => sum + log.kg, 0)
+  return round3(Math.max(0, net))
 }
 
 function weeklySaved(logs) {

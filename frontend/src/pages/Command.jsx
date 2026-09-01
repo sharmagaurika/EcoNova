@@ -29,7 +29,7 @@ export default function Command() {
             </div>
             <div>
               <p className="kicker">Carbon mass</p>
-              <p className={`display text-5xl ${isHighCarbon ? 'text-flare' : 'text-gold'}`}>{carbonMass}</p>
+              <p className={`display text-5xl ${isHighCarbon ? 'text-flare' : 'text-gold'}`}>{carbonMass.toFixed(1)}</p>
             </div>
           </div>
         </div>
@@ -41,7 +41,7 @@ export default function Command() {
                 <p className="kicker">7-day mass</p>
                 <h3 className="display text-3xl">{deltaPct <= 0 ? `${deltaPct}%` : `+${deltaPct}%`}</h3>
               </div>
-              <p className="text-sm text-mute">{greenActions} green actions this week</p>
+              <p className="text-sm text-mute">{greenActions} green actions · {carbonMass.toFixed(1)} kg net</p>
             </div>
             <Sparkline values={state.sparkline} color={deltaPct <= 0 ? '#3dffc8' : '#ff6b6b'} />
           </div>

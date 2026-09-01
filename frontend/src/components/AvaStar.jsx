@@ -60,7 +60,7 @@ export default function AvaStar({ ecoScore, carbonMass, isHighEco, isHighCarbon 
       <div className="absolute -bottom-2 text-center">
         <p className="kicker">{status}</p>
         <p className="mono text-xs text-mute mt-1">
-          {ecoScore} eco · {carbonMass} kg mass
+          {ecoScore} eco · {carbonMass.toFixed(1)} kg mass
         </p>
       </div>
     </div>

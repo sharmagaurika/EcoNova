@@ -21,6 +21,7 @@ export default function Coach() {
   const categories = [
     ['Transport', breakdown.transport],
     ['Food', breakdown.food],
+    ['Energy', breakdown.energy],
     ['Shopping', breakdown.shopping],
     ['Digital', breakdown.digital],
     ['Other', breakdown.other],
@@ -76,7 +77,7 @@ export default function Coach() {
 function buildReport({ name, carbonMass, deltaPct, rank, total, breakdown }) {
   const direction = deltaPct <= 0 ? 'dropped' : 'rose'
   const culprit = Object.entries(breakdown)
-    .filter(([key]) => !['saved', 'energy'].includes(key))
+    .filter(([key]) => key !== 'saved')
     .sort((a, b) => b[1] - a[1])[0]
-  return `${name}, your orbital mass ${direction} ${Math.abs(deltaPct)}% this sprint to ${carbonMass} kg CO2e.\n\nYou sit ${rank} of ${total} in the current window. ${culprit?.[0] || 'Transport'} is the heaviest vector at ${culprit?.[1]?.toFixed(1) || 0} kg.\n\nA single high-drag event (flights, beef, fuel) outweighs a week of quiet commuting. Swap the dense items, keep the green streak, and the Supernova is still in reach.`
+  return `${name}, your orbital mass ${direction} ${Math.abs(deltaPct)}% this sprint to ${carbonMass.toFixed(1)} kg CO2e.\n\nYou sit ${rank} of ${total} in the current window. ${culprit?.[0] || 'Transport'} is the heaviest vector at ${culprit?.[1]?.toFixed(1) || 0} kg.\n\nA single high-drag event (flights, beef, fuel) outweighs a week of quiet commuting. Swap the dense items, keep the green streak, and the Supernova is still in reach.`
 }

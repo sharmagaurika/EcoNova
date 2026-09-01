@@ -87,7 +87,7 @@ export function ratingFor(kg, itemCount = 1) {
 }
 
 export function ecoScoreFromMass(weeklyKg) {
-  return clamp(Math.round(100 - weeklyKg * 1.35), 4, 99)
+  return clamp(Math.round(100 - weeklyKg * 0.46), 12, 99)
 }
 
 export function estimateFromText(raw) {

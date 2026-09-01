@@ -80,7 +80,7 @@ export default function CosmicMap({ friends, constellationMode }) {
             </div>
             <p className="mt-2 text-xs font-medium">{friend.name}</p>
             <p className="mono text-[10px]" style={{ color: starColor(friend.ecoScore) }}>
-              {friend.ecoScore} · {friend.weeklyKg} kg
+              {friend.ecoScore} · {friend.weeklyKg.toFixed(1)} kg
             </p>
           </motion.div>
         ))}
@@ -94,7 +94,7 @@ export default function CosmicMap({ friends, constellationMode }) {
         {friends.map((friend) => (
           <div key={friend.id} className="panel-tight p-3 text-center">
             <p className="text-sm font-medium">{friend.name}</p>
-            <p className="mono text-xs text-mute">{friend.weeklyKg} kg / 7d</p>
+            <p className="mono text-xs text-mute">{friend.weeklyKg.toFixed(1)} kg / 7d</p>
             {friend.isFocusing && <p className="text-[10px] text-signal mt-1">Focusing</p>}
           </div>
         ))}

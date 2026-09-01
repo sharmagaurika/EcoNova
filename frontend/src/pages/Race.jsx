@@ -9,7 +9,7 @@ const SCOPES = [
 ]
 
 export default function Race() {
-  const { racers, you, state } = useStore()
+  const { racers, state } = useStore()
   const [scope, setScope] = useState('circle')
 
   const rows = useMemo(() => {
@@ -19,7 +19,7 @@ export default function Race() {
   }, [racers, scope])
 
   const leader = rows[0]
-  const youRank = rows.find((r) => r.id === 'you')?.rank ?? you?.rank
+  const youRank = rows.findIndex((racer) => racer.id === 'you') + 1
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
@@ -44,8 +44,8 @@ export default function Race() {
 
         <div className="mt-5 panel-tight p-4">
           <p className="kicker">Supernova</p>
-          <p className="text-lg font-medium">{leader?.name} leads at {leader?.weeklyKg} kg</p>
-          <p className="text-sm text-mute mt-1">You are rank {youRank}. Drop mass to reclaim the badge.</p>
+          <p className="text-lg font-medium">{leader?.name} leads at {leader?.weeklyKg.toFixed(1)} kg</p>
+          <p className="text-sm text-mute mt-1">You are rank {youRank || '—'} of {rows.length}. Drop mass to reclaim the badge.</p>
         </div>
 
         <ol className="mt-5 space-y-2">
@@ -57,7 +57,7 @@ export default function Race() {
               <span className="mono w-6 text-mute">{index + 1}</span>
               <span className="flex-1 font-medium">{racer.name}</span>
               <span className="text-xs text-mute">{racer.country}</span>
-              <span className="mono text-sm">{racer.weeklyKg} kg</span>
+              <span className="mono text-sm">{racer.weeklyKg.toFixed(1)} kg</span>
             </li>
           ))}
         </ol>

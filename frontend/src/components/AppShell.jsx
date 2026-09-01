@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useStore } from '../lib/store'
 
 const LINKS = [
@@ -18,12 +18,12 @@ export default function AppShell() {
     <div className="relative z-10 min-h-screen">
       <div className="mx-auto flex min-h-screen max-w-7xl">
         <aside className="hidden lg:flex w-64 shrink-0 flex-col gap-6 px-5 py-6">
-          <a href="/" className="block">
+          <Link to="/" className="block">
             <p className="kicker">Hack the Galaxy</p>
             <h1 className="display text-4xl leading-none">
               ECO<span className="text-signal">NOVA</span>
             </h1>
-          </a>
+          </Link>
 
           <nav className="flex flex-col gap-1">
             {LINKS.map((link) => (
@@ -40,7 +40,7 @@ export default function AppShell() {
             <p className="kicker mb-2">Pilot</p>
             <p className="font-semibold">{state.profile.name}</p>
             <p className="mono text-xs text-mute mt-1">
-              LVL {state.profile.level} · SCORE {ecoScore} · RANK {you?.rank ?? '—'}
+              LVL {state.profile.level} · SCORE {ecoScore} · RANK #{you?.rank ?? '—'}
             </p>
           </div>
         </aside>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useStore } from '../lib/store'
 
 const FEATURES = [
   {
@@ -28,6 +29,7 @@ const STACK = [
 ]
 
 export default function Landing() {
+  const { carbonMass, ecoScore, you, state } = useStore()
   return (
     <div className="relative z-10">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
@@ -75,10 +77,10 @@ export default function Landing() {
         >
           <p className="kicker">Telemetry</p>
           <div className="mt-4 grid grid-cols-2 gap-3">
-            <Metric label="Weekly mass" value="32.4 kg" tone="text-gold" />
-            <Metric label="Eco score" value="85" tone="text-signal" />
-            <Metric label="Sprint rank" value="#4" tone="text-ion" />
-            <Metric label="Streak" value="7 days" tone="text-paper" />
+            <Metric label="Weekly mass" value={`${carbonMass.toFixed(1)} kg`} tone="text-gold" />
+            <Metric label="Eco score" value={String(ecoScore)} tone="text-signal" />
+            <Metric label="Sprint rank" value={`#${you?.rank ?? 4}`} tone="text-ion" />
+            <Metric label="Streak" value={`${state.profile.streak} days`} tone="text-paper" />
           </div>
           <p className="mt-5 text-sm text-mute">
             AvaSTAR brightens as mass drops. Debris gathers when the week runs heavy. Supernova is the prize.
