@@ -14,9 +14,10 @@ export default function Log() {
         <p className="text-sm font-semibold text-good">Add to this week</p>
         <h1 className="serif mt-1 text-4xl">What did you do?</h1>
         <p className="mt-3 max-w-2xl text-mute">
-          Tap a card, track a commute, or add a purchase. It shows up in the list under the buttons right away.
+          Add a receipt, tap a card, or track a commute. It shows up in this week’s list right away.
         </p>
       </div>
+      <CarbonLogger />
       <QuickLog />
       <div className="card p-6">
         <p className="font-semibold">This week’s activity</p>
@@ -37,7 +38,6 @@ export default function Log() {
         )}
       </div>
       <GpsHud />
-      <CarbonLogger />
     </div>
   )
 }

@@ -44,7 +44,7 @@ const MERCHANT_RULES = [
   { test: /shell|esso|bp|petro|chevron|exxon|gas station|petrol|fuel/i, category: 'transport', kgFromAmount: (usd) => (usd / FACTORS.fuelPricePerL) * FACTORS.fuelKgPerL },
   { test: /uber|lyft|taxi|bolt/i, category: 'transport', kgFromAmount: (usd) => (usd / FACTORS.rideshareCostPerKm) * FACTORS.rideshareKgPerKm },
   { test: /airline|air canada|delta|united|jetblue|flight|airport/i, category: 'transport', kgFromAmount: (usd) => (usd > 250 ? FACTORS.longHaulFlight : FACTORS.shortHaulFlight) },
-  { test: /whole foods|grocery|trader joe|safeway|loblaws|walmart|tesco/i, category: 'food', kgFromAmount: (usd) => usd * FACTORS.groceryKgPerUsd },
+  { test: /whole foods|grocery|trader joe|safeway|loblaws|walmart|tesco|costco|superstore|no frills|metro|aldi|kroger/i, category: 'food', kgFromAmount: (usd) => usd * FACTORS.groceryKgPerUsd },
   { test: /amazon|shopify|parcel|fedex|ups/i, category: 'shopping', kgFromAmount: (usd) => usd * FACTORS.amazonKgPerUsd },
   { test: /nike|zara|h&m|uniqlo|gap|fashion/i, category: 'shopping', kgFromAmount: (usd) => (usd / FACTORS.fashionAvgPrice) * FACTORS.fashionKgPerItem },
   { test: /netflix|spotify|youtube|streaming/i, category: 'digital', kgFromAmount: () => FACTORS.streamingKgPerHr * 2 },
@@ -90,37 +90,47 @@ export function ecoScoreFromMass(weeklyKg) {
   return clamp(Math.round(100 - weeklyKg * 0.46), 12, 99)
 }
 
+const SKIP_LINE = /^(sub\s*total|tax|hst|gst|pst|vat|change due|change|cash|visa|mastercard|debit|amex|thank|cashier|tel\.?|phone|www\.|http|store\s*#|date|time|#\d)/i
+
 export function estimateFromText(raw) {
   const text = (raw || '').trim()
-  if (!text) {
-    return emptyParse('empty')
+  if (!text) return emptyParse('empty')
+
+  const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean)
+  const docRule = MERCHANT_RULES.find((rule) => rule.test.test(text))
+  const items = []
+
+  for (const line of lines) {
+    if (SKIP_LINE.test(line) || /^(grand\s+)?total\b/i.test(line)) continue
+    const amount = lineAmount(line)
+    if (amount == null || amount <= 0 || amount > 8000) continue
+    const rule = MERCHANT_RULES.find((rule) => rule.test.test(line)) || docRule
+    const desc = stripPrice(line) || line
+    const kg = round3(rule ? rule.kgFromAmount(amount) : fallbackKg(line, amount))
+    items.push({
+      description: desc.slice(0, 80),
+      category: rule?.category ?? inferCategory(line),
+      kg_co2: kg,
+      confidence: rule ? 'medium' : 'low',
+    })
   }
 
-  const amount = parseAmount(text)
-  const rule = MERCHANT_RULES.find((rule) => rule.test.test(text))
-  const description = text.split('\n')[0].slice(0, 80) || 'Logged activity'
-  const category = rule?.category ?? inferCategory(text)
-  const kg = round3(rule ? rule.kgFromAmount(amount || 25) : fallbackKg(text, amount))
-  const items = [{ description, category, kg_co2: kg, confidence: rule ? 'medium' : 'low' }]
+  if (!items.length) {
+    const totalLine = [...lines].reverse().find((line) => /total/i.test(line) && !/sub\s*total/i.test(line))
+    const amount = (totalLine && lineAmount(totalLine)) || parseAmount(text)
+    const kg = round3(docRule ? docRule.kgFromAmount(amount || 25) : fallbackKg(text, amount))
+    items.push({
+      description: (lines[0] || 'Receipt').slice(0, 80),
+      category: docRule?.category ?? inferCategory(text),
+      kg_co2: kg,
+      confidence: docRule ? 'medium' : 'low',
+    })
+  }
 
-  const extraLines = text
-    .split('\n')
-    .slice(1)
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .slice(0, 6)
-
-  extraLines.forEach((line) => {
-    const nested = estimateFromText(line)
-    if (nested.items[0]) items.push(nested.items[0])
-  })
-
-  const unique = extraLines.length ? items : items.slice(0, 1)
-  const total = round3(unique.reduce((sum, item) => sum + item.kg_co2, 0))
-  const rating = ratingFor(total, unique.length)
-
+  const total = round3(items.reduce((sum, item) => sum + item.kg_co2, 0))
+  const rating = ratingFor(total, items.length)
   return {
-    items: unique,
+    items,
     total_kg_co2: total,
     rating: rating.label,
     tone: rating.tone,
@@ -174,9 +184,25 @@ function fallbackKg(text, amount) {
   return 1.2
 }
 
+function lineAmount(line) {
+  const cleaned = line.replace(/,/g, '')
+  const money = [...cleaned.matchAll(/\$\s*(\d+(?:\.\d{1,2})?)/g)]
+  if (money.length) return Number(money[money.length - 1][1])
+  const trailing = cleaned.match(/(\d+\.\d{2})\s*$/)
+  return trailing ? Number(trailing[1]) : null
+}
+
+function stripPrice(line) {
+  return line
+    .replace(/\$\s*[\d,]+\.\d{2}/g, '')
+    .replace(/[\d,]+\.\d{2}\s*$/, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+}
+
 function parseAmount(text) {
-  const money = text.replace(/,/g, '').match(/\$\s*(\d+(\.\d+)?)/)
-  if (money) return Number(money[1])
+  const last = lineAmount(text)
+  if (last) return last
   const match = text.replace(/,/g, '').match(/(\d+(\.\d{1,2})?)/)
   return match ? Number(match[1]) : 0
 }
