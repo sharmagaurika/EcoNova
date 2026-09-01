@@ -6,7 +6,7 @@ export default {
       colors: {
         paper: '#f6efff',
         ink: '#f6efff',
-        mute: '#b7a8c9',
+        mute: '#d7cbe8',
         line: 'rgba(255, 142, 200, 0.16)',
         good: '#7dffe0',
         warn: '#f5c26b',

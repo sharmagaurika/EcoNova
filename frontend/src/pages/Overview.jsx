@@ -62,7 +62,7 @@ export default function Overview() {
               onClick={() => !mission.done && dispatch({ type: 'complete-mission', id: mission.id })}
             className="flex w-full items-center gap-3 rounded-xl border border-line px-4 py-3 text-left hover:border-brand/40"
             >
-              <span className={`grid h-6 w-6 place-items-center rounded-full text-xs ${mission.done ? 'bg-good text-void' : 'border border-line'}`}>
+              <span className={`grid h-6 w-6 place-items-center rounded-full text-xs font-bold ${mission.done ? 'bg-good text-void' : 'border border-line text-paper'}`}>
                 {mission.done ? '✓' : ''}
               </span>
               <span className="flex-1">{mission.text}</span>
