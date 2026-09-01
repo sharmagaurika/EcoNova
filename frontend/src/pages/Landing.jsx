@@ -1,29 +1,36 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useStore } from '../lib/store'
+import Mark from '../components/Mark'
+import MiniStar from '../components/MiniStar'
 
 export default function Landing() {
-  const { carbonMass, you, deltaPct } = useStore()
+  const { carbonMass, you, deltaPct, ecoScore } = useStore()
 
   return (
     <div className="min-h-screen">
       <header className="mx-auto flex max-w-5xl items-center justify-between px-5 py-5">
-        <p className="font-semibold">EcoNova</p>
+        <p className="font-semibold"><Mark /></p>
         <Link to="/overview" className="btn btn-primary">Open my week</Link>
       </header>
 
       <section className="mx-auto max-w-5xl px-5 pb-16 pt-8">
-        <p className="text-sm font-semibold text-good">Weekly carbon race</p>
-        <h1 className="serif mt-3 max-w-3xl text-5xl leading-tight sm:text-6xl">
-          Lowest CO₂ this week wins.
-        </h1>
-        <p className="mt-5 max-w-2xl text-lg leading-7 text-mute">
-          EcoNova turns everyday stuff — commutes, groceries, flights — into kilograms of CO₂.
-          You log what you did. We estimate the carbon. Friends compete to stay lightest.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link to="/log" className="btn btn-primary">Add an activity</Link>
-          <Link to="/overview" className="btn btn-ghost">See this week’s score</Link>
+        <div className="flex flex-wrap items-start justify-between gap-8">
+          <div className="max-w-2xl">
+            <p className="text-sm font-semibold text-good">Weekly carbon race</p>
+            <h1 className="serif mt-3 text-5xl leading-tight sm:text-6xl">
+              Lowest CO₂ this week wins.
+            </h1>
+            <p className="mt-5 text-lg leading-7 text-mute">
+              EcoNova turns everyday stuff — commutes, groceries, flights — into kilograms of CO₂.
+              You log what you did. We estimate the carbon. Friends compete to stay lightest.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link to="/log" className="btn btn-primary">Add an activity</Link>
+              <Link to="/overview" className="btn btn-ghost">See this week’s score</Link>
+            </div>
+          </div>
+          <MiniStar ecoScore={ecoScore} className="hidden sm:block" />
         </div>
 
         <div className="mt-12 grid gap-4 sm:grid-cols-3">

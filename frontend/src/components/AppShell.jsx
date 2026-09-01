@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { useStore } from '../lib/store'
+import Mark from './Mark'
 
 const LINKS = [
   { to: '/overview', label: 'My week' },
@@ -17,7 +18,7 @@ export default function AppShell() {
       <header className="sticky top-0 z-20 border-b border-line bg-[#f4f1ea]/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
           <Link to="/" className="font-semibold tracking-tight">
-            EcoNova
+            <Mark />
           </Link>
           <nav className="hidden sm:flex flex-1 justify-center gap-1">
             {LINKS.map((link) => (

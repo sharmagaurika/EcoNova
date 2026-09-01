@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Sparkline from '../components/Sparkline'
 import StreakCalendar from '../components/StreakCalendar'
+import MiniStar from '../components/MiniStar'
 import { useStore } from '../lib/store'
 import { formatKg } from '../lib/format'
 
@@ -11,14 +12,17 @@ export default function Overview() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <p className="text-sm font-semibold text-good">This week</p>
-        <h1 className="serif mt-1 text-4xl sm:text-5xl">You created {carbonMass.toFixed(1)} kg of CO₂</h1>
-        <p className="mt-3 max-w-2xl text-mute">
-          Rank <strong className="text-ink">#{you?.rank ?? '—'}</strong> of {state.racers.length}.
-          {' '}{deltaPct <= 0 ? `That’s ${Math.abs(deltaPct)}% lighter than last week.` : `That’s ${deltaPct}% heavier than last week.`}
-          {' '}{greenActions} low-carbon actions logged. Eco score {ecoScore}/100.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="text-sm font-semibold text-good">This week</p>
+          <h1 className="serif mt-1 text-4xl sm:text-5xl">You created {carbonMass.toFixed(1)} kg of CO₂</h1>
+          <p className="mt-3 max-w-2xl text-mute">
+            Rank <strong className="text-ink">#{you?.rank ?? '—'}</strong> of {state.racers.length}.
+            {' '}{deltaPct <= 0 ? `That’s ${Math.abs(deltaPct)}% lighter than last week.` : `That’s ${deltaPct}% heavier than last week.`}
+            {' '}{greenActions} low-carbon actions logged. Eco score {ecoScore}/100.
+          </p>
+        </div>
+        <MiniStar ecoScore={ecoScore} />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
