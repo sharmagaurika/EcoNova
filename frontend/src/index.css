@@ -35,7 +35,16 @@ body {
 
 ::selection { background: rgba(255, 142, 200, 0.35); }
 
-.serif { font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 600; letter-spacing: -0.03em; }
+.serif {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: #f6efff;
+}
+
+b, strong, .hl {
+  color: #ff8ec8;
+}
 
 .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
 

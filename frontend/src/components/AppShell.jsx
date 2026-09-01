@@ -33,7 +33,7 @@ export default function AppShell() {
             ))}
           </nav>
           <p className="ml-auto mono text-xs text-mute">
-            {carbonMass.toFixed(1)} kg this week · #{you?.rank ?? '—'}
+            {carbonMass.toFixed(1)} kg this week · <span className="hl">#{you?.rank ?? '—'}</span>
           </p>
         </div>
       </header>

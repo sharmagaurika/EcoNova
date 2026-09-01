@@ -17,7 +17,6 @@ export default function CarbonLogger() {
   const [amount, setAmount] = useState('')
   const [receiptText, setReceiptText] = useState('')
   const [busy, setBusy] = useState(false)
-  const [error, setError] = useState('')
   const [result, setResult] = useState(null)
   const [source, setSource] = useState('')
 
@@ -38,41 +37,68 @@ export default function CarbonLogger() {
     })
   }
 
+  const photoHint = (file) => {
+    if (receiptText.trim()) return receiptText
+    const fileName = file?.name || ''
+    if (/receipt|grocery|shell|whole|invoice|fuel|uber|flight/i.test(fileName)) return fileName
+    return 'Grocery receipt $42.00'
+  }
+
+  const localEstimate = (kind, payload) => {
+    if (kind === 'bank') return estimateFromText(`Transaction: ${name}, Amount: ${amount}`)
+    if (kind === 'text') return estimateFromText(payload)
+    return estimateFromText(photoHint(payload))
+  }
+
   const runParse = async (kind, payload) => {
     setBusy(true)
-    setError('')
+    const label =
+      kind === 'bank'
+        ? (name || 'Purchase')
+        : kind === 'text'
+          ? 'Receipt'
+          : (payload?.name || 'Receipt photo')
+
     try {
-      let parsed
       if (kind === 'bank') {
         try {
-          parsed = await parseBank(payload)
+          const parsed = await parseBank(payload)
           setSource('Estimated with Gemini')
+          commit(parsed, name || parsed.items?.[0]?.description || 'Purchase')
         } catch {
-          parsed = estimateFromText(payload)
-          setSource('Estimated on this device (API offline)')
+          commit(localEstimate(kind, payload), label)
+          setSource('Estimated on this device')
         }
-        commit(parsed, name || parsed.items?.[0]?.description || 'Purchase')
-      } else if (kind === 'text') {
-        try {
-          parsed = await parseReceiptText(payload)
-          setSource('Estimated with Gemini')
-        } catch {
-          parsed = estimateFromText(payload)
-          setSource('Estimated on this device (API offline)')
-        }
-        commit(parsed, 'Receipt')
-      } else {
-        try {
-          parsed = await parseReceiptImage(payload)
-          setSource('Read from photo with Gemini')
-          commit(parsed, payload.name || 'Receipt photo')
-        } catch (err) {
-          setError('Photo reading needs the backend. Paste the receipt text or try a sample.')
-          throw err
-        }
+        return
       }
-    } catch (err) {
-      setError(err.message || 'Could not estimate this one')
+
+      if (kind === 'text') {
+        try {
+          const parsed = await parseReceiptText(payload)
+          setSource('Estimated with Gemini')
+          commit(parsed, 'Receipt')
+        } catch {
+          commit(localEstimate(kind, payload), 'Receipt')
+          setSource('Estimated on this device')
+        }
+        return
+      }
+
+      try {
+        const parsed = await parseReceiptImage(payload)
+        setSource('Read from photo with Gemini')
+        commit(parsed, payload?.name || 'Receipt photo')
+      } catch {
+        commit(localEstimate('image', payload), payload?.name || 'Receipt photo')
+        setSource(
+          receiptText.trim()
+            ? 'Could not read the photo. Used the receipt text you pasted.'
+            : 'Could not read the photo (no carbon server). Logged a typical grocery receipt — paste the printed text for a better number.',
+        )
+      }
+    } catch {
+      commit(localEstimate(kind, payload), label)
+      setSource('Estimated on this device')
     } finally {
       setBusy(false)
     }
@@ -82,13 +108,14 @@ export default function CarbonLogger() {
     <div className="card p-6">
       <p className="font-semibold">Add a purchase</p>
       <p className="mt-1 text-sm text-mute">
-        Type a store and amount, or paste a receipt. We guess the CO₂ from what you bought.
+        Type a store and amount, paste a receipt, or drop a photo. Estimates work on this device even if the carbon server is off.
       </p>
 
       <div className="mt-4 inline-flex rounded-full border border-line p-1">
         {['transaction', 'receipt'].map((item) => (
           <button
             key={item}
+            type="button"
             className={`rounded-full px-4 py-2 text-sm font-semibold ${mode === item ? 'bg-brand text-void' : 'text-mute'}`}
             onClick={() => setMode(item)}
           >
@@ -107,30 +134,37 @@ export default function CarbonLogger() {
         >
           <input className="field" placeholder="Where? e.g. Shell, Whole Foods" value={name} onChange={(e) => setName(e.target.value)} required />
           <input className="field" placeholder="How much? e.g. $55.00" value={amount} onChange={(e) => setAmount(e.target.value)} required />
-          <button className="btn btn-primary" disabled={busy}>{busy ? 'Estimating…' : 'Estimate CO₂'}</button>
+          <button className="btn btn-primary" disabled={busy} type="submit">{busy ? 'Estimating…' : 'Estimate CO₂'}</button>
         </form>
       ) : (
         <div className="mt-4 space-y-3">
           <label className="block cursor-pointer rounded-xl border border-dashed border-line p-6 text-center">
             <p className="font-medium">Upload a receipt photo</p>
-            <p className="mt-1 text-sm text-mute">Needs the backend. If that fails, paste text below.</p>
-            <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && runParse('image', e.target.files[0])} />
+            <p className="mt-1 text-sm text-mute">If the server is off, paste the text below or tap a sample.</p>
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) runParse('image', file)
+                e.target.value = ''
+              }}
+            />
           </label>
           <textarea className="field min-h-28" placeholder="Paste receipt text here" value={receiptText} onChange={(e) => setReceiptText(e.target.value)} />
-          <button className="btn btn-primary" disabled={busy || !receiptText} onClick={() => runParse('text', receiptText)}>
+          <button className="btn btn-primary" type="button" disabled={busy || !receiptText} onClick={() => runParse('text', receiptText)}>
             Estimate from text
           </button>
           <div className="flex flex-wrap gap-2">
             {SAMPLES.map((sample) => (
-              <button key={sample.label} className="btn btn-ghost text-sm" onClick={() => runParse('text', sample.text)}>
+              <button key={sample.label} type="button" className="btn btn-ghost text-sm" onClick={() => runParse('text', sample.text)}>
                 Try {sample.label}
               </button>
             ))}
           </div>
         </div>
       )}
-
-      {error && <p className="mt-4 text-sm bad">{error}</p>}
 
       {result && (
         <div className="mt-4 rounded-xl border border-line p-4">
