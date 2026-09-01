@@ -43,7 +43,8 @@ body {
 }
 
 b, strong, .hl {
-  color: #ff8ec8;
+  color: #ffb4dc !important;
+  -webkit-text-fill-color: #ffb4dc;
 }
 
 .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }

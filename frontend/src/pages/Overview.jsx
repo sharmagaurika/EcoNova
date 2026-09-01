@@ -16,8 +16,8 @@ export default function Overview() {
         <div>
           <p className="text-sm font-semibold text-good">This week</p>
           <h1 className="serif mt-1 text-4xl sm:text-5xl">You created {carbonMass.toFixed(1)} kg of CO₂</h1>
-          <p className="mt-3 max-w-2xl text-mute">
-            Rank <span className="hl">#{you?.rank ?? '—'}</span> of {state.racers.length}.
+          <p className="mt-3 max-w-2xl text-base leading-7 text-paper">
+            Rank <span className="hl" style={{ color: '#ffb4dc' }}>#{you?.rank ?? '—'}</span> of {state.racers.length}.
             {' '}{deltaPct <= 0 ? `That’s ${Math.abs(deltaPct)}% lighter than last week.` : `That’s ${deltaPct}% heavier than last week.`}
             {' '}{greenActions} low-carbon actions logged. Eco score {ecoScore}/100.
           </p>

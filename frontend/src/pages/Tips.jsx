@@ -26,10 +26,10 @@ export default function Tips() {
       <div>
         <p className="text-sm font-semibold text-good">Why you ranked here</p>
         <h1 className="serif mt-1 text-4xl">How to move up this week</h1>
-        <p className="mt-3 max-w-2xl text-lg leading-7 text-mute">
-          Your total is {carbonMass.toFixed(1)} kg CO₂, rank <span className="hl">#{rank}</span> of {state.racers.length}.
+        <p className="mt-3 max-w-2xl text-lg leading-7 text-paper">
+          Your total is {carbonMass.toFixed(1)} kg CO₂, rank <span className="hl" style={{ color: '#ffb4dc' }}>#{rank}</span> of {state.racers.length}.
           That’s {deltaPct <= 0 ? `${Math.abs(deltaPct)}% lighter` : `${deltaPct}% heavier`} than last week.
-          The biggest slice is <span className="hl">{heaviest?.[0]}</span> at {heaviest?.[1]?.toFixed(1)} kg.
+          The biggest slice is <span className="hl" style={{ color: '#ffb4dc' }}>{heaviest?.[0]}</span> at {heaviest?.[1]?.toFixed(1)} kg.
         </p>
       </div>
 

@@ -32,8 +32,8 @@ export default function AppShell() {
               </NavLink>
             ))}
           </nav>
-          <p className="ml-auto mono text-xs text-mute">
-            {carbonMass.toFixed(1)} kg this week · <span className="hl">#{you?.rank ?? '—'}</span>
+          <p className="ml-auto mono text-xs text-paper">
+            {carbonMass.toFixed(1)} kg this week · <span className="hl" style={{ color: '#ffb4dc' }}>#{you?.rank ?? '—'}</span>
           </p>
         </div>
       </header>
