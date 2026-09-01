@@ -1,8 +1,8 @@
 name: Deploy GitHub Pages
 
+# Only run when you ask. Automatic deploys 404 until Pages is enabled
+# in the repo: Settings → Pages → Source: GitHub Actions.
 on:
-  push:
-    branches: [main, cursor/econova-presentation-rebuild-cbc5]
   workflow_dispatch:
 
 permissions:
