@@ -22,7 +22,11 @@ export default function Overview() {
             {' '}{greenActions} low-carbon actions logged. Eco score {ecoScore}/100.
           </p>
         </div>
-        <MiniStar ecoScore={ecoScore} />
+        <div className="ml-auto text-center">
+          <MiniStar ecoScore={ecoScore} />
+          <p className="mt-1 text-sm font-medium">{state.profile.name}</p>
+          <p className="text-[11px] text-mute">AvaSTAR</p>
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
