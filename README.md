@@ -1,55 +1,43 @@
-# Hack-the-Galaxy 3rd Place Winner
+# EcoNova
 
- 🌌 EcoNova
-The Galaxy’s Most Competitive Sustainability Tracker
-Product Specification · v1.0 · 2026
+The galaxy’s competitive sustainability tracker.
 
-# Overview
-### "In the race to save the Galaxy, your footprint is your speed. The lighter you are, the faster you go."
-EcoNova transforms the abstract concept of a carbon footprint into a high-stakes, real-time competitive race. By blending Passive GPS Sensing, Gemini 2.0 AI Parsing, and social competition, we make sustainability measurable, personal, achievable, and fun!
+> In the race to save the galaxy, your footprint is your speed. The lighter you are, the faster you go.
 
-# Key Features
-Intelligent Estimation Engine
-Live GPS Galaxy Tracking: Passively classifies transport modes (Walking vs. Highway) using real-time speed thresholds via the Geolocation API.
+EcoNova turns carbon mass into a weekly sprint. GPS classifies how you move, Gemini (with an on-device fallback) parses receipts and bank lines, and friend circles race for the Supernova badge.
 
-Gemini AI "Nova" Parser: * Flight/Email Scraping: Extracts origin, destination, and seat class to apply IPCC multipliers.
+## Product
 
-Bank/Receipt OCR: Uses Gemini 2.0 Flash to categorize spending (e.g., Shell vs. Whole Foods) and assign carbon weights with confidence scoring.
+- **AvaSTAR** — orbital avatar that brightens as eco score rises and gathers debris when weekly mass is heavy.
+- **Live GPS** — Geolocation API speed thresholds map walking, cycling, transit, car, and highway.
+- **Nova parser** — Gemini 2.0 Flash for receipts/bank text, IPCC/DEFRA 2024 factors on device if the API is offline.
+- **Race** — global, national, and friend-circle leaderboards on a rolling 7-day window.
+- **Nova coach** — swap suggestions and a weekly narrative of why rank moved.
 
-Manual Quick-Log: Tap-to-log "Cosmic Actions" for instant daily updates.
+## Stack
 
-# Social & Competitive Galaxy
-The Leaderboard: Global, National, and Private "Friend Circles."
+| Layer | Tech |
+| --- | --- |
+| Frontend | React 18, Vite, Tailwind, Framer Motion, Canvas HUD |
+| Backend | FastAPI, Gemini Flash, IPCC/DEFRA emission tables |
+| Storage | Privacy-first `localStorage` for the demo client |
 
-Trash Talk Feed: A real-time event log (e.g., "Alex just added a long-haul flight ✈️ +650kg. Ouch.")
+## Run
 
-Weekly Sprints: Rolling 7-day windows where the lowest score earns the "Supernova" badge.
+```bash
+# frontend
+cd frontend
+npm install
+npm run dev
 
-# Powered with AI
-Behavioral Nudges: Personalized "Swap" suggestions (e.g., "Swap 2 beef meals for chicken to drop 11kg this week").
+# backend (optional — client degrades gracefully)
+cd backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
+```
 
-Weekly Narrative Reports: Structured insights explaining why your rank moved and how to reclaim your lead.
+Open `http://localhost:3000`. Enter the race from the landing page, then use Command, Galaxy, Race, Logger, and Nova.
 
-# Tech Stack
-Frontend: "Sleek & Space-Ready"
-Core: Vanilla HTML5, CSS3, JavaScript (Single-file prototype for 0-latency).
-
-Typography: Bebas Neue (Aggressive headings) + DM Mono (Technical data).
-
-Visuals: Custom Canvas API for score sparklines and "Streak" calendars.
-
-API: navigator.geolocation for real-time transport classification.
-
-AI / Intelligence: "The Central Core"
-Engine: Gemini 2.0 Flash via REST API.
-
-Function: Structured JSON parsing for all unstructured user data (receipts/emails).
-
-Context: System-prompted with the IEA 2024 Grid Intensity for hyper-local accuracy.
-
-# Data & Infrastructure
-Storage: localStorage for privacy-first, on-device user history.
-
-Emissions Logic: Hardcoded JS constants derived from IPCC, ICAO, and DEFRA 2024 data.
-
-Environment: Mobile-responsive web architecture.
+Set `GOOGLE_API_KEY` in `backend/.env` to enable live Gemini parsing. Without it, the logger uses the local estimator so the demo still presents.

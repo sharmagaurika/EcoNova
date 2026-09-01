@@ -1,74 +1,60 @@
-// API functions for connecting to the backend
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
-const API_BASE_URL = 'http://localhost:8000'
-
-// Parse bank statement data
-export async function parseBank(text) {
+async function request(path, options = {}, timeoutMs = 8000) {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
   try {
-    const response = await fetch(`${API_BASE_URL}/parse/bank`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text }),
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+      ...options,
+      signal: controller.signal,
     })
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      const detail = await response.text()
+      throw new Error(detail || `HTTP ${response.status}`)
     }
     return await response.json()
-  } catch (error) {
-    console.error('Error parsing bank data:', error)
-    throw error
+  } finally {
+    clearTimeout(timer)
   }
 }
 
-// Parse receipt from image
-export async function parseReceiptImage(file) {
-  try {
-    const formData = new FormData()
-    formData.append('file', file)
-    
-    const response = await fetch(`${API_BASE_URL}/parse/receipt/image`, {
-      method: 'POST',
-      body: formData,
-    })
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    return await response.json()
-  } catch (error) {
-    console.error('Error parsing receipt image:', error)
-    throw error
-  }
-}
-
-// Parse receipt from text
-export async function parseReceiptText(text) {
-  try {
-    const response = await fetch(`${API_BASE_URL}/parse/receipt`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text }),
-    })
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    return await response.json()
-  } catch (error) {
-    console.error('Error parsing receipt text:', error)
-    throw error
-  }
-}
-
-// Check API health
 export async function checkApiHealth() {
   try {
-    const response = await fetch(API_BASE_URL)
-    return await response.json()
-  } catch (error) {
-    console.error('API is not reachable:', error)
+    return await request('/', { method: 'GET' }, 2500)
+  } catch {
     return null
   }
+}
+
+export async function parseBank(text) {
+  return request('/parse/bank', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text }),
+  })
+}
+
+export async function parseReceiptText(text) {
+  return request('/parse/receipt', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text }),
+  })
+}
+
+export async function parseReceiptImage(file) {
+  const formData = new FormData()
+  formData.append('file', file)
+  return request('/parse/receipt/image', {
+    method: 'POST',
+    body: formData,
+  }, 20000)
+}
+
+export async function logMovement(distanceKm, speedKmh) {
+  return request('/log/movement', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ distance_km: distanceKm, speed_kmh: speedKmh }),
+  })
 }
