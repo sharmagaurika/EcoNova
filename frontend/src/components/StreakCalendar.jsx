@@ -23,7 +23,7 @@ export default function StreakCalendar({ logs }) {
             key={cell.key}
             title={cell.key}
             className={`grid h-8 place-items-center rounded-md text-[10px] mono ${
-              cell.heavy ? 'bg-orange-100 text-orange-800' : cell.green ? 'bg-green-100 text-green-800' : 'bg-[#eeeae2] text-mute'
+              cell.heavy ? 'bg-amber-400/20 text-amber-200' : cell.green ? 'bg-good/20 text-good' : 'bg-white/5 text-mute'
             }`}
           >
             {cell.day}

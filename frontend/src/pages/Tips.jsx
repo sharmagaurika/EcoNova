@@ -29,7 +29,7 @@ export default function Tips() {
         <p className="mt-3 max-w-2xl text-lg leading-7 text-mute">
           Your total is {carbonMass.toFixed(1)} kg CO₂, rank #{rank} of {state.racers.length}.
           That’s {deltaPct <= 0 ? `${Math.abs(deltaPct)}% lighter` : `${deltaPct}% heavier`} than last week.
-          The biggest slice is <strong className="text-ink">{heaviest?.[0]}</strong> at {heaviest?.[1]?.toFixed(1)} kg.
+          The biggest slice is <strong className="text-paper">{heaviest?.[0]}</strong> at {heaviest?.[1]?.toFixed(1)} kg.
         </p>
       </div>
 

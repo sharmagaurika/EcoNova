@@ -89,7 +89,7 @@ export default function CarbonLogger() {
         {['transaction', 'receipt'].map((item) => (
           <button
             key={item}
-            className={`rounded-full px-4 py-2 text-sm font-semibold ${mode === item ? 'bg-ink text-paper' : 'text-mute'}`}
+            className={`rounded-full px-4 py-2 text-sm font-semibold ${mode === item ? 'bg-brand text-void' : 'text-mute'}`}
             onClick={() => setMode(item)}
           >
             {item === 'transaction' ? 'Store + amount' : 'Receipt'}

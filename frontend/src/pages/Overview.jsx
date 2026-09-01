@@ -57,9 +57,9 @@ export default function Overview() {
             <button
               key={mission.id}
               onClick={() => !mission.done && dispatch({ type: 'complete-mission', id: mission.id })}
-              className="flex w-full items-center gap-3 rounded-xl border border-line px-4 py-3 text-left"
+            className="flex w-full items-center gap-3 rounded-xl border border-line px-4 py-3 text-left hover:border-brand/40"
             >
-              <span className={`grid h-6 w-6 place-items-center rounded-full text-xs ${mission.done ? 'bg-good text-paper' : 'border border-line'}`}>
+              <span className={`grid h-6 w-6 place-items-center rounded-full text-xs ${mission.done ? 'bg-good text-void' : 'border border-line'}`}>
                 {mission.done ? '✓' : ''}
               </span>
               <span className="flex-1">{mission.text}</span>
@@ -72,7 +72,7 @@ export default function Overview() {
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="card p-6">
           <p className="font-semibold">Last 7 days</p>
-          <Sparkline values={state.sparkline} color="#176b45" />
+          <Sparkline values={state.sparkline} color="#ff8ec8" />
         </div>
         <div className="card p-6">
           <StreakCalendar logs={state.logs} />

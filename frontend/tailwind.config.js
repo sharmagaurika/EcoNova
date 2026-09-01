@@ -4,15 +4,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        paper: '#f4f1ea',
-        ink: '#16181d',
-        mute: '#5d635c',
-        line: '#d7ddd2',
-        card: '#fffcf6',
-        good: '#176b45',
-        warn: '#b45309',
-        bad: '#b42318',
-        brand: '#5b3cc4',
+        paper: '#f6efff',
+        ink: '#f6efff',
+        mute: '#b7a8c9',
+        line: 'rgba(255, 142, 200, 0.16)',
+        good: '#7dffe0',
+        warn: '#f5c26b',
+        bad: '#ff7b8a',
+        brand: '#ff8ec8',
+        void: '#07030f',
       },
       fontFamily: {
         sans: ['DM Sans', 'system-ui', 'sans-serif'],

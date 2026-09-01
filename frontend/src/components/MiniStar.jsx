@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default function MiniStar({ ecoScore = 85, className = '' }) {
-  const glow = ecoScore > 80 ? '#5b3cc4' : '#176b45'
+  const glow = ecoScore > 80 ? '#ff8ec8' : '#7dffe0'
   return (
     <svg width="72" height="72" viewBox="0 0 100 100" className={className} aria-hidden>
       <defs>

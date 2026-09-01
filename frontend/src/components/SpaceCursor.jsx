@@ -62,10 +62,10 @@ export default function SpaceCursor() {
             height: i === 0 ? 18 : 8,
             opacity: i === 0 ? 1 : 0.18 + (1 - i / TRAIL) * 0.35,
             background: i === 0
-              ? 'radial-gradient(circle, #fff 0 18%, #c4b5fd 18% 42%, #5b3cc4 42% 100%)'
-              : '#a78bfa',
+              ? 'radial-gradient(circle, #fff 0 18%, #ffd6ee 18% 42%, #ff8ec8 42% 100%)'
+              : '#ff8ec8',
             clipPath: 'polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%)',
-            filter: i === 0 ? 'drop-shadow(0 0 6px rgba(91,60,196,0.7))' : 'none',
+            filter: i === 0 ? 'drop-shadow(0 0 8px rgba(255,142,200,0.9))' : 'none',
           }}
         />
       ))}

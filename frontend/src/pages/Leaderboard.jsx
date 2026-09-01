@@ -49,7 +49,7 @@ export default function Leaderboard() {
         {rows.map((racer, index) => (
           <li
             key={racer.id}
-            className={`flex items-center gap-4 px-5 py-4 ${racer.id === 'you' ? 'bg-[#eef6f0]' : ''}`}
+            className={`flex items-center gap-4 px-5 py-4 ${racer.id === 'you' ? 'bg-brand/10' : ''}`}
           >
             <span className="mono w-6 text-mute">{index + 1}</span>
             <span className="flex-1 font-medium">{racer.name}{racer.id === 'you' ? ' (you)' : ''}</span>

@@ -1,7 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import AppShell from './components/AppShell'
-import Landing from './pages/Landing'
 import Overview from './pages/Overview'
 import Log from './pages/Log'
 import Leaderboard from './pages/Leaderboard'
@@ -18,14 +17,14 @@ export default function App() {
         <SpaceCursor />
         <div className="relative z-10">
           <Routes>
-            <Route path="/" element={<Landing />} />
             <Route element={<AppShell />}>
-              <Route path="/overview" element={<Overview />} />
+              <Route index element={<Overview />} />
               <Route path="/log" element={<Log />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/tips" element={<Tips />} />
             </Route>
-            <Route path="/command" element={<Navigate to="/overview" replace />} />
+            <Route path="/overview" element={<Navigate to="/" replace />} />
+            <Route path="/command" element={<Navigate to="/" replace />} />
             <Route path="/galaxy" element={<Navigate to="/leaderboard" replace />} />
             <Route path="/race" element={<Navigate to="/leaderboard" replace />} />
             <Route path="/coach" element={<Navigate to="/tips" replace />} />
